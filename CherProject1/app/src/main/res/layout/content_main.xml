@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.example.cher.cherproject1.MainActivity"
+    tools:showIn="@layout/activity_main">
+
+    <TextView
+        android:id="@+id/appTitle_id"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:textAlignment="center"
+        android:layout_centerHorizontal="true"
+        android:text="To Do List"
+        android:textStyle="bold"
+        android:textSize="25dp"
+        android:textAllCaps="true"
+        android:gravity="center"
+        android:background="@drawable/faded_flowers_background"
+        android:textColor="@android:color/black"/>
+
+    <EditText
+        android:id="@+id/list_editText_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:hint="Enter New To Do List"
+        android:layout_below="@+id/appTitle_id"
+        android:layout_marginTop="10dp"/>
+
+    //marginTop was 15dp. mirror other side
+
+    <ListView
+        android:id="@+id/list_listView_id"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/list_editText_id">
+
+    </ListView>
+
+
+
+</RelativeLayout>
