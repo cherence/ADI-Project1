@@ -23,6 +23,10 @@ public class MainActivity extends AppCompatActivity {
     ListView listListView;
     ArrayList<String> mListArrayList;
     ArrayAdapter<String> mListArrayAdapter;
+    public static final String DATA_KEY = "myDataKey";
+    public static final int MAIN_REQUEST_CODE = 22;
+    ArrayList<String> mDummyList;
+    ArrayList<ArrayList<String>> mMasterDataList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +40,9 @@ public class MainActivity extends AppCompatActivity {
         listListView = (ListView) findViewById(R.id.list_listView_id);
 
         mListArrayList = new ArrayList<>();
+        mDummyList = new ArrayList<>();
+
+        mMasterDataList = new ArrayList<>();
 
         mListArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mListArrayList);
 
@@ -51,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
                     Snackbar.make(view, "Please enter a new to do list", Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 } else{
                     mListArrayList.add(userInputLists);
+
                     mListArrayAdapter.notifyDataSetChanged();
                     listEditText.getText().clear();
                 }
@@ -72,7 +80,8 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
                 String newTitleString = (String)parent.getAdapter().getItem(position);
                 intent.putExtra("newTitleString", newTitleString);
-                startActivity(intent);
+                intent.putExtra(DATA_KEY, mListArrayList);
+                startActivityForResult(intent, MAIN_REQUEST_CODE);
             }
         });
 
@@ -98,5 +107,17 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == MAIN_REQUEST_CODE){
+            if (resultCode == RESULT_OK){
+                if (data != null){
+                    mDummyList = data.getStringArrayListExtra(DATA_KEY); //used to be mListArrayList
+                }
+            } else if (requestCode == RESULT_CANCELED){
+            }
+        }
     }
 }

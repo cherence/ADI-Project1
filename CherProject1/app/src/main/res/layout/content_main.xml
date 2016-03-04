@@ -23,7 +23,7 @@
         android:textSize="25dp"
         android:textAllCaps="true"
         android:gravity="center"
-        android:background="@drawable/big_floral_background"
+        android:background="@drawable/mofadedflorals"
         android:textColor="@android:color/black"/>
 
     <EditText

@@ -1,5 +1,6 @@
 package com.example.cher.cherproject1;
 
+import android.content.Intent;
 import android.graphics.Paint;
 import android.graphics.PaintFlagsDrawFilter;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -25,6 +27,7 @@ public class DetailsActivity extends AppCompatActivity {
     ArrayList<String> mItemArrayList;
     ArrayAdapter<String> mItemArrayAdapter;
     Boolean strike = true;
+    ArrayList<String> mTempArrayList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +39,8 @@ public class DetailsActivity extends AppCompatActivity {
         titleListNameTextView = (TextView) findViewById(R.id.titleListNameTextView_id);
         itemsEditText = (EditText) findViewById(R.id.items_editText_id);
         itemsListView = (ListView) findViewById(R.id.items_listView_id);
+
+        mTempArrayList = getData();
 
         String extra = getIntent().getStringExtra("newTitleString");
         titleListNameTextView.setText(extra);
@@ -88,4 +93,29 @@ public class DetailsActivity extends AppCompatActivity {
         });
     }
 
+    private ArrayList<String> getData(){
+        Intent intent2 = getIntent();
+        if (intent2 == null){
+            return null;
+        }
+        return intent2.getStringArrayListExtra(MainActivity.DATA_KEY);
+    }
+
+    private void sendNewListBack(){
+        Intent intent3 = getIntent();
+        if (intent3 == null){
+            return;
+        }
+        Log.d("DetailsActivity", "sendNewListBack");
+        intent3.putExtra(MainActivity.DATA_KEY, mTempArrayList);
+        setResult(RESULT_OK, intent3);
+        finish();
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        sendNewListBack();
+        Log.d("DetailsActivity", "onBackPressed");
+    }
 }
