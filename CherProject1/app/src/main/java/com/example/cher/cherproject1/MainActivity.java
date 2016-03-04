@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<ArrayList<String>> mMasterDataArrayList;
     public static final String DATA_INDEX_KEY = "mydataIndexKey";
     public static final int ERROR_INDEX = -7;
+    private static int currentPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
         mDummyListArrayList = new ArrayList<>();
 
         mMasterDataArrayList = new ArrayList<>();
-        mMasterDataArrayList.add(mListArrayList); //try it here
 
 
         mListArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mListArrayList);
@@ -63,7 +63,8 @@ public class MainActivity extends AppCompatActivity {
                     Snackbar.make(view, "Please enter a new to do list", Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 } else{
                     mListArrayList.add(userInputLists);
-//                    mMasterDataArrayList.add(mListArrayList);
+                    ArrayList<String> tempList = new ArrayList<String>();
+                    mMasterDataArrayList.add(tempList);
                     mListArrayAdapter.notifyDataSetChanged();
                     listEditText.getText().clear();
                     Log.d("MainActivity", "FAB adds stuff");
@@ -83,11 +84,12 @@ public class MainActivity extends AppCompatActivity {
         listListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                currentPosition = position;
                 Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
-                String newTitleString = (String)parent.getAdapter().getItem(position);
+                String newTitleString = (String)parent.getAdapter().getItem(currentPosition);
                 intent.putExtra("newTitleString", newTitleString);
-                intent. putExtra(DATA_INDEX_KEY, position);
-                intent.putExtra(DATA_KEY, mMasterDataArrayList.get(position));
+                intent. putExtra(DATA_INDEX_KEY, currentPosition);
+                intent.putExtra(DATA_KEY, mMasterDataArrayList.get(currentPosition));
                 startActivityForResult(intent, MAIN_REQUEST_CODE);
             }
         });
@@ -122,9 +124,10 @@ public class MainActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK){
                 if (data != null){
                     mDummyListArrayList = data.getStringArrayListExtra(DATA_KEY);
-                    int index = data.getIntExtra(DATA_INDEX_KEY, ERROR_INDEX);
-                    if (index != ERROR_INDEX){
-                        mMasterDataArrayList.set(index, mDummyListArrayList);
+                    mMasterDataArrayList.set(currentPosition, mDummyListArrayList);
+//                    int index = data.getIntExtra(DATA_INDEX_KEY, ERROR_INDEX);
+//                    if (index != ERROR_INDEX){
+
                     }
                 }
             } else if (requestCode == RESULT_CANCELED){
@@ -132,4 +135,4 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-}
+

@@ -27,7 +27,6 @@ public class DetailsActivity extends AppCompatActivity {
     ArrayList<String> mItemArrayList;
     ArrayAdapter<String> mItemArrayAdapter;
     Boolean strike = true;
-    ArrayList<String> mTempArrayList;
     private int index;
 
     @Override
@@ -48,7 +47,7 @@ public class DetailsActivity extends AppCompatActivity {
         titleListNameTextView.setText(extra);
 
         mItemArrayList = new ArrayList<>();
-        mTempArrayList = new ArrayList<>();
+        mItemArrayList = getIntent().getStringArrayListExtra(MainActivity.DATA_KEY);
 
         mItemArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mItemArrayList);
         itemsListView.setAdapter(mItemArrayAdapter);
