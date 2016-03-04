@@ -76,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 mListArrayList.remove(position);
+                mMasterDataArrayList.remove(position);
                 mListArrayAdapter.notifyDataSetChanged();
                 return true;
             }
