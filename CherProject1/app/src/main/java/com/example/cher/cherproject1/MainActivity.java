@@ -6,6 +6,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,8 +26,10 @@ public class MainActivity extends AppCompatActivity {
     ArrayAdapter<String> mListArrayAdapter;
     public static final String DATA_KEY = "myDataKey";
     public static final int MAIN_REQUEST_CODE = 22;
-    ArrayList<String> mDummyList;
-    ArrayList<ArrayList<String>> mMasterDataList;
+    ArrayList<String> mDummyListArrayList;
+    ArrayList<ArrayList<String>> mMasterDataArrayList;
+    public static final String DATA_INDEX_KEY = "mydataIndexKey";
+    public static final int ERROR_INDEX = -7;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,9 +43,11 @@ public class MainActivity extends AppCompatActivity {
         listListView = (ListView) findViewById(R.id.list_listView_id);
 
         mListArrayList = new ArrayList<>();
-        mDummyList = new ArrayList<>();
+        mDummyListArrayList = new ArrayList<>();
 
-        mMasterDataList = new ArrayList<>();
+        mMasterDataArrayList = new ArrayList<>();
+        mMasterDataArrayList.add(mListArrayList); //try it here
+
 
         mListArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mListArrayList);
 
@@ -58,9 +63,10 @@ public class MainActivity extends AppCompatActivity {
                     Snackbar.make(view, "Please enter a new to do list", Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 } else{
                     mListArrayList.add(userInputLists);
-
+//                    mMasterDataArrayList.add(mListArrayList);
                     mListArrayAdapter.notifyDataSetChanged();
                     listEditText.getText().clear();
+                    Log.d("MainActivity", "FAB adds stuff");
                 }
             }
         });
@@ -80,7 +86,8 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
                 String newTitleString = (String)parent.getAdapter().getItem(position);
                 intent.putExtra("newTitleString", newTitleString);
-                intent.putExtra(DATA_KEY, mListArrayList);
+                intent. putExtra(DATA_INDEX_KEY, position);
+                intent.putExtra(DATA_KEY, mMasterDataArrayList.get(position));
                 startActivityForResult(intent, MAIN_REQUEST_CODE);
             }
         });
@@ -114,9 +121,14 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == MAIN_REQUEST_CODE){
             if (resultCode == RESULT_OK){
                 if (data != null){
-                    mDummyList = data.getStringArrayListExtra(DATA_KEY); //used to be mListArrayList
+                    mDummyListArrayList = data.getStringArrayListExtra(DATA_KEY);
+                    int index = data.getIntExtra(DATA_INDEX_KEY, ERROR_INDEX);
+                    if (index != ERROR_INDEX){
+                        mMasterDataArrayList.set(index, mDummyListArrayList);
+                    }
                 }
             } else if (requestCode == RESULT_CANCELED){
+                Log.w("Main", "Failed ot get new list back");
             }
         }
     }

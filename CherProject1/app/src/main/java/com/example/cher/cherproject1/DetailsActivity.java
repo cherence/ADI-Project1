@@ -28,6 +28,7 @@ public class DetailsActivity extends AppCompatActivity {
     ArrayAdapter<String> mItemArrayAdapter;
     Boolean strike = true;
     ArrayList<String> mTempArrayList;
+    private int index;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,12 +41,14 @@ public class DetailsActivity extends AppCompatActivity {
         itemsEditText = (EditText) findViewById(R.id.items_editText_id);
         itemsListView = (ListView) findViewById(R.id.items_listView_id);
 
-        mTempArrayList = getData();
+        mItemArrayList = getDataList();
+        index = getDataIndex();
 
         String extra = getIntent().getStringExtra("newTitleString");
         titleListNameTextView.setText(extra);
 
         mItemArrayList = new ArrayList<>();
+        mTempArrayList = new ArrayList<>();
 
         mItemArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mItemArrayList);
         itemsListView.setAdapter(mItemArrayAdapter);
@@ -93,7 +96,7 @@ public class DetailsActivity extends AppCompatActivity {
         });
     }
 
-    private ArrayList<String> getData(){
+    private ArrayList<String> getDataList(){
         Intent intent2 = getIntent();
         if (intent2 == null){
             return null;
@@ -101,13 +104,21 @@ public class DetailsActivity extends AppCompatActivity {
         return intent2.getStringArrayListExtra(MainActivity.DATA_KEY);
     }
 
+    private int getDataIndex(){
+        Intent intent2 = getIntent();
+        if (intent2 == null){
+            return MainActivity.ERROR_INDEX;
+        }
+        return intent2.getIntExtra(MainActivity.DATA_INDEX_KEY, MainActivity.ERROR_INDEX);
+    }
     private void sendNewListBack(){
         Intent intent3 = getIntent();
         if (intent3 == null){
             return;
         }
         Log.d("DetailsActivity", "sendNewListBack");
-        intent3.putExtra(MainActivity.DATA_KEY, mTempArrayList);
+        intent3.putExtra(MainActivity.DATA_KEY, mItemArrayList);
+        intent3.putExtra(MainActivity.DATA_INDEX_KEY, index);
         setResult(RESULT_OK, intent3);
         finish();
     }
