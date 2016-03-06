@@ -24,35 +24,46 @@ public class MainActivity extends AppCompatActivity {
     ListView listListView;
     ArrayList<String> mListArrayList;
     ArrayAdapter<String> mListArrayAdapter;
-    public static final String DATA_KEY = "myDataKey";
-    public static final int MAIN_REQUEST_CODE = 22;
     ArrayList<String> mDummyListArrayList;
     ArrayList<ArrayList<String>> mMasterDataArrayList;
-    public static final String DATA_INDEX_KEY = "mydataIndexKey";
-    public static final int ERROR_INDEX = -7;
-    private static int currentPosition;
+    protected static final String DATA_INDEX_KEY = "mydataIndexKey";
+    protected static int currentPosition;
+    protected static final String DATA_KEY = "myDataKey";
+    protected static final int MAIN_REQUEST_CODE = 22;
+    protected static final int ERROR_INDEX = -7;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
+        initializeViews();
+        initializeArrayLists();
+        initializeAndSetArrayAdapter();
+        createAndSetFAB();
+        createAndSetOnItemLongClickListener();
+        createAndSetOnItemClickListener();
+    }
+
+
+    private void initializeViews(){
         appTitle = (TextView) findViewById(R.id.appTitle_id);
         listEditText = (EditText) findViewById(R.id.list_editText_id);
         listListView = (ListView) findViewById(R.id.list_listView_id);
+    }
 
+    private void initializeArrayLists(){
         mListArrayList = new ArrayList<>();
         mDummyListArrayList = new ArrayList<>();
-
         mMasterDataArrayList = new ArrayList<>();
+    }
 
-
+    private void initializeAndSetArrayAdapter(){
         mListArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mListArrayList);
-
         listListView.setAdapter(mListArrayAdapter);
+    }
 
+    private void createAndSetFAB(){
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,7 +82,9 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
 
+    private void createAndSetOnItemLongClickListener(){
         listListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
@@ -81,7 +94,9 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+    }
 
+    private void createAndSetOnItemClickListener(){
         listListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -94,29 +109,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(intent, MAIN_REQUEST_CODE);
             }
         });
-
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -126,9 +118,6 @@ public class MainActivity extends AppCompatActivity {
                 if (data != null){
                     mDummyListArrayList = data.getStringArrayListExtra(DATA_KEY);
                     mMasterDataArrayList.set(currentPosition, mDummyListArrayList);
-//                    int index = data.getIntExtra(DATA_INDEX_KEY, ERROR_INDEX);
-//                    if (index != ERROR_INDEX){
-
                     }
                 }
             } else if (requestCode == RESULT_CANCELED){

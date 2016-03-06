@@ -33,9 +33,7 @@
         android:textAlignment="center"
         android:hint="Enter New To Do List"
         android:layout_below="@+id/appTitle_id"
-        android:layout_marginTop="10dp"/>
-
-    //marginTop was 15dp. mirror other side
+        android:layout_marginTop="15dp"/>
 
     <ListView
         android:id="@+id/list_listView_id"

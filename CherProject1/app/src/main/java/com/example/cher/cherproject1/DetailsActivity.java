@@ -33,41 +33,63 @@ public class DetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
+        initializeViews();
+        initializeAndSetArrayList();
+        getIntentToChangeTitle();
+        getIntentToSaveWork();
+        initializeAndSetArrayAdapter();
+        createAndSetFAB();
+        createAndSetOnItemLongClickListener();
+        createAndSetOnItemClickListener();
+    }
+
+    private void initializeViews(){
         titleListNameTextView = (TextView) findViewById(R.id.titleListNameTextView_id);
         itemsEditText = (EditText) findViewById(R.id.items_editText_id);
         itemsListView = (ListView) findViewById(R.id.items_listView_id);
+    }
 
-        mItemArrayList = getDataList();
-        index = getDataIndex();
-
-        String extra = getIntent().getStringExtra("newTitleString");
-        titleListNameTextView.setText(extra);
-
+    private void initializeAndSetArrayList(){
         mItemArrayList = new ArrayList<>();
         mItemArrayList = getIntent().getStringArrayListExtra(MainActivity.DATA_KEY);
+    }
 
+    private void getIntentToChangeTitle(){
+        String extra = getIntent().getStringExtra("newTitleString");
+        titleListNameTextView.setText(extra);
+    }
+
+    private void getIntentToSaveWork(){
+        mItemArrayList = getDataList();
+        index = getDataIndex();
+    }
+
+    private void initializeAndSetArrayAdapter(){
         mItemArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mItemArrayList);
         itemsListView.setAdapter(mItemArrayAdapter);
 
+    }
+
+    private void createAndSetFAB(){
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String userInputItems = itemsEditText.getText().toString();
 
-                if (userInputItems.isEmpty()){
+                if (userInputItems.isEmpty()) {
                     Snackbar.make(view, "Please enter an item", Snackbar.LENGTH_LONG).setAction("Action", null).show();
-                } else{
+                } else {
                     mItemArrayList.add(userInputItems);
                     mItemArrayAdapter.notifyDataSetChanged();
                     itemsEditText.getText().clear();
                 }
             }
         });
+    }
 
+    private void createAndSetOnItemLongClickListener(){
         itemsListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
@@ -76,7 +98,9 @@ public class DetailsActivity extends AppCompatActivity {
                 return true;
             }
         });
+    }
 
+    private void createAndSetOnItemClickListener(){
         itemsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -85,7 +109,6 @@ public class DetailsActivity extends AppCompatActivity {
                     itemStrikeTextView.setPaintFlags(0);
                     mItemArrayAdapter.notifyDataSetChanged();
                     strike = true;
-
                 } else{
                     itemStrikeTextView.setPaintFlags(itemStrikeTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                     mItemArrayAdapter.notifyDataSetChanged();
@@ -103,14 +126,14 @@ public class DetailsActivity extends AppCompatActivity {
         return intent2.getStringArrayListExtra(MainActivity.DATA_KEY);
     }
 
-    private int getDataIndex(){
+    private int getDataIndex() {
         Intent intent2 = getIntent();
         if (intent2 == null){
             return MainActivity.ERROR_INDEX;
         }
         return intent2.getIntExtra(MainActivity.DATA_INDEX_KEY, MainActivity.ERROR_INDEX);
     }
-    private void sendNewListBack(){
+    private void sendNewListBack() {
         Intent intent3 = getIntent();
         if (intent3 == null){
             return;
@@ -121,7 +144,6 @@ public class DetailsActivity extends AppCompatActivity {
         setResult(RESULT_OK, intent3);
         finish();
     }
-
 
     @Override
     public void onBackPressed() {
